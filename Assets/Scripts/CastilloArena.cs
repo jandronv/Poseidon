@@ -10,21 +10,24 @@ public class CastilloArena : MonoBehaviour {
 	[Tooltip("Cada valor de la lista representa los estados del castillo, es decir, vida inicial, estados intermedios y el ultimo representa la vida maxima")]
 	public List<int> Estados;
 	[Tooltip("Vida maxima del castillo")]
-	public int VidaActual = 1;
+	public float VidaActual = 1;
 	[Tooltip("Velocidad a la que se van añadiendo vidas en segundos")]
 	public float VelocidadMontaje = 10;
 	[Tooltip("Numero de vidas por ticks.")]
 	public int numVidasPorTicks = 1;
+	public bool EnConstruccion = false;
 	public bool CastilloTerminado = false;
-
-
-
+	public Vector2 posInGrid;
 	private float _mTimeToAddVida = 0;
+
+	private bool firstIni = false;
+
+	public List<Sprite> Sprites;
 
 	// Use this for initialization
 	void Start () {
 		
-		VidaActual = 1;
+		VidaActual = 0;
 	}
 	
 	// Update is called once per frame
@@ -32,44 +35,55 @@ public class CastilloArena : MonoBehaviour {
 
 
 
-		if (VidaActual == 0)
-		{
-			Debug.Log("Castillo destruido");
-			//TODO revisar esto
-			Destroy(gameObject);
-		}
-		else if (VidaActual == Estados[0])
-		{
+		if (EnConstruccion) {
 
-			Debug.Log("Cambiamos al sprite 1");
-		}
-		else if (VidaActual == Estados[1])
-		{
-			Debug.Log("Cambiamos al sprite 2");
-		}
-		else if (VidaActual == Estados[2])
-		{
-			Debug.Log("Cambiamos al sprite 3");
-		}
-		else if (VidaActual == Estados[3])
-		{
-			Debug.Log("Cambiamos al sprite 4");
-		}
-		else if (VidaActual == Estados[4])//VidaMaxima
-		{
-			Debug.Log("Castillo terminado, sprite 5");
-			CastilloTerminado = true;
-			//Meter sprite terminado
-		}
+			
+			if (VidaActual == Estados[0] && firstIni)
+			{
+				Debug.Log("Cambiamos al sprite 0");
+				GetComponent<SpriteRenderer>().sprite = Sprites[0];
+				EnConstruccion = false;
+		
+			}
+			else if (VidaActual > Estados[1] && VidaActual <= Estados[2])
+			{
+				Debug.Log("Cambiamos al sprite 1");
 
-		//Cada x 
-		_mTimeToAddVida += Time.deltaTime;
+				GetComponent<SpriteRenderer>().sprite = Sprites[1];
 
-		if (_mTimeToAddVida > VelocidadMontaje && !CastilloTerminado)
-		{
-			Debug.Log("Añadiendo "+ numVidasPorTicks+ " vidas al castillo");
-			_mTimeToAddVida = 0;
-			VidaActual += numVidasPorTicks;
+			}
+			else if (VidaActual > Estados[2] && VidaActual <= Estados[3])
+			{
+				Debug.Log("Cambiamos al sprite 2");
+
+				GetComponent<SpriteRenderer>().sprite = Sprites[2];
+
+			}
+			else if (VidaActual > Estados[3] && VidaActual <= Estados[4])
+			{
+				Debug.Log("Cambiamos al sprite 3");
+				GetComponent<SpriteRenderer>().sprite = Sprites[3];
+			}
+			else if (VidaActual >= Estados[4])//VidaMaxima
+			{
+				Debug.Log("Castillo terminado, sprite 4");
+				GetComponent<SpriteRenderer>().sprite = Sprites[4];
+
+
+				CastilloTerminado = true;
+				//Meter sprite terminado
+			}
+
+			//Cada x 
+			_mTimeToAddVida += Time.deltaTime;
+			//Debug.Log("_mTimeToAddVida: " + _mTimeToAddVida);
+			if (_mTimeToAddVida > VelocidadMontaje && !CastilloTerminado)
+			{
+				Debug.Log("Añadiendo " + numVidasPorTicks + " vidas al castillo");
+				_mTimeToAddVida = 0;
+				VidaActual += numVidasPorTicks;
+				firstIni = true;
+			}
 		}
 	}
 
@@ -80,7 +94,7 @@ public class CastilloArena : MonoBehaviour {
 	{
 
 		//Restamos una vida por click
-		RestaVida(1);
+		RestaVida(5);
 	}
 
 	/// <summary>
@@ -98,6 +112,11 @@ public class CastilloArena : MonoBehaviour {
 		}
 	}
 
+	public void SetPositionInGrid(int x, int y)
+	{
+		posInGrid = new Vector2(x, y);
+
+	}
 
 
 
