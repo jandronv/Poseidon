@@ -36,7 +36,7 @@ public class CastleManager : MonoBehaviour
 
     void Start()
     {
-        CreateGrid();
+        //CreateGrid();
 
 
     }
