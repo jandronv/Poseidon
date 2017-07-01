@@ -22,20 +22,21 @@ public class CastleManager : MonoBehaviour
     [Tooltip("Centro del grid")]
     public Transform spawnPoint;
 
+    [Tooltip("Cantidad de castillos completos con los que se acabaría el juego")]
+    public int castleToGameover;
 
+    [Tooltip("Cantidad de castillos completados en el momento")]
+    private int completedCastles;
 
 	public float TimeToConstruct;
 
 	private float timeConstruct = 0;
+	
 
-
-    private void Awake()
-    {
-
-    }
 
     void Start()
     {
+        //CreateGrid();
 
 
     }
