@@ -1,76 +1,68 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI; // Required when Using UI elements.
+using UnityEditor.SceneManagement;
 
-public class GameManager : MonoBehaviour
-{
-    
 
-    public float cell_size = 2.0f;
-    
+public class GameManager : MonoBehaviour {
+    public Slider SunSlider;
+    public float MaxTime = 20f;
+    public float ActiveTime = 0f;
+    bool end = false;
     // Use this for initialization
+    void Start () {
+        SunSlider.value = 0;
+	}
 
-    public int Columns;
-    public int Rows;
-
-    [Tooltip("Distancias entre celdas")]
-    public float distanceX, distanceY;
-
-    [Tooltip("Posiciones de castillos")]
-    public GameObject position;//Usamos un gameobject para indicar dónde se crean los objetos
-
-    [Tooltip("Centro del grid")]
-    public Transform spawnPoint;
-
-    [Tooltip("Cantidad de castillos completos con los que se acabaría el juego")]
-    public int castleToGameover;
-
-    [Tooltip("Cantidad de castillos completados en el momento")]
-    private int completedCastles;
-
-
-    void Start()
+    public void Update()
     {
-        CreateGrid();
-    }
+        ActiveTime += Time.deltaTime;
+        var percent = ActiveTime / MaxTime;
+        SunSlider.value = Mathf.Lerp(0, 1, percent);
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    /// <summary>
-    /// Crea la matriz de posiciones para los niños
-    /// </summary>
-    public void CreateGrid()
-    {
-        Destroy(GameObject.Find("Grid"));
-        GameObject newEmptyGameObject = new GameObject("Grid");
-        // following line is probably not neccessary
-        newEmptyGameObject.transform.position = Vector3.zero;
-
-        // some math to find the most left and bottom offset
-        float offsetLeft = (-Columns / 2f) * distanceX + distanceX / 2f;
-        float offsetBottom = (-Rows / 2f) * distanceY + distanceY / 2f;
-        // set it as first spawn position (z=1 because you had it in your script)
-        Vector3 nextPosition = new Vector3(offsetLeft, offsetBottom, 1f);
-
-        for (int y = 0; y < Rows; y++)
+        if (SunSlider.value >= 1 && end==false)
         {
-            for (int x = 0; x < Columns; x++)
-            {
-                GameObject clone = Instantiate(position, nextPosition, Quaternion.identity) as GameObject;
-                clone.transform.parent = newEmptyGameObject.transform;
-                // add x distance
-                nextPosition.x += distanceX;
-            }
-            // reset x position and add y distance
-            nextPosition.x = offsetLeft;
-            nextPosition.y += distanceY;
+            end = true;
+            StartCoroutine(GameOver("timeup"));
         }
-        // move the whole grid to the spawnPoint, if there is one
-        if (spawnPoint != null)
-            newEmptyGameObject.transform.position = spawnPoint.position;
+    }
+
+    protected IEnumerator GameOver(string cause)
+    {
+        Time.timeScale = 0f;
+        if (cause == "timeup")
+        {
+            Debug.Log("SUNSET IS HERE");
+
+        }
+        else if(cause=="kidsWin")
+        {
+
+        }
+
+
+
+        while (!Input.GetMouseButtonDown(0))
+        {
+
+            yield return StartCoroutine(WaitForKeyDown(Input.GetMouseButtonDown(0)));
+        }
+
+        restartGame();
+
+    }
+
+    protected IEnumerator WaitForKeyDown(bool mousePressed)
+    {
+
+        yield return null;
+
+    }
+    public void restartGame()
+    {
+
+        Time.timeScale = 1.0f;
+        EditorSceneManager.LoadScene(EditorSceneManager.GetActiveScene().name);
     }
 }
