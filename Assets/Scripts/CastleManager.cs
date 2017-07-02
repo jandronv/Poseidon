@@ -32,7 +32,7 @@ public class CastleManager : MonoBehaviour
 
 	private float timeConstruct = 0;
 
-
+    public int numCastlesDestroyed=0;
 
 
     void Start()

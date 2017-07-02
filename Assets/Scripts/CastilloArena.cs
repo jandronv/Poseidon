@@ -24,7 +24,7 @@ public class CastilloArena : MonoBehaviour {
 
 	public List<Sprite> Sprites;
     public int clicks=0;
-
+    public CastleManager CM;
 	void Start () {
 		
 		VidaActual = 0;
@@ -50,7 +50,8 @@ public class CastilloArena : MonoBehaviour {
 				//lanzar animacion de llorar
 				EnConstruccion = false;
 				firstIni = false;
-				
+				CM.numCastlesDestroyed++;
+               
 
 			}
 			else if (VidaActual > Estados[1] && VidaActual <= Estados[2])

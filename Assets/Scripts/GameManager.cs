@@ -21,9 +21,12 @@ public class GameManager : MonoBehaviour
 
     [Tooltip("Cantidad de castillos completados en el momento")]
     private int completedCastles=0;
+    
     // Use this for initialization
 
     int totalClicks=0;
+
+    public GameObject MenuGameOver;
 
     public Image sunsetBG;
 
@@ -68,6 +71,7 @@ public class GameManager : MonoBehaviour
 
     protected IEnumerator GameOver(string cause)
     {
+
         Time.timeScale = 0f;
         if (cause == "timeup")
         {
@@ -75,24 +79,27 @@ public class GameManager : MonoBehaviour
             {
                 totalClicks += castillos[i].clicks;
             }
-
+            MenuGameOver.transform.FindChild("LevelResult").GetComponent<Text>().text="Victory!";
             Debug.Log("SUNSET IS HERE" +totalClicks);
         }
         else if (cause == "kidswin")
         {
             Debug.Log("JAJAJ LOL XD NOOB");
 
+            MenuGameOver.transform.FindChild("LevelResult").GetComponent<Text>().text = "You lose!";
         }
 
+        MenuGameOver.transform.FindChild("Castles").transform.FindChild("Text").GetComponent<Text>().text = CM.numCastlesDestroyed.ToString();
+        MenuGameOver.transform.FindChild("Seashells").transform.FindChild("Text").GetComponent<Text>().text = "25";
 
+        GameObject.Find("CanvasGameOver").GetComponent<Canvas>().enabled = true;
 
         while (!Input.GetMouseButtonDown(0))
         {
 
             yield return StartCoroutine(WaitForKeyDown(Input.GetMouseButtonDown(0)));
         }
-
-        restartGame();
+        
 
     }
 
@@ -107,5 +114,12 @@ public class GameManager : MonoBehaviour
 
         Time.timeScale = 1.0f;
         EditorSceneManager.LoadScene(EditorSceneManager.GetActiveScene().name);
+    }
+
+    public void exitGame()
+    {
+
+        Time.timeScale = 1.0f;
+        EditorSceneManager.LoadScene("StartScene");
     }
 }
