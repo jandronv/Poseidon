@@ -1,71 +1,148 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class SeaManager : MonoBehaviour {
+public enum Swipe { None, Up, Down, Left, Right };
+public class SeaManager : MonoBehaviour
+{
+    public float minSwipeLength = 5f;
+    Vector2 firstPressPos;
+    Vector2 secondPressPos;
+    Vector2 currentSwipe;
 
-    private Vector3 fp;   //First touch position
-    private Vector3 lp;   //Last touch position
-    private float dragDistance;  //minimum distance for a swipe to be registered
+    Vector2 firstClickPos;
+    Vector2 secondClickPos;
 
-    void Start()
-    {
-        dragDistance = Screen.height * 15 / 100; //dragDistance is 15% height of the screen
-    }
+    public int waveCharge=0;
+
+    public static Swipe swipeDirection;
 
     void Update()
     {
-        if (Input.touchCount == 1) // user is touching the screen with a single touch
+        DetectSwipe();
+
+    }
+
+    public void DetectSwipe()
+    {
+        if (Input.touches.Length > 0)
         {
-            Debug.Log("PAQUETOCAS");
-            Touch touch = Input.GetTouch(0); // get the touch
-            
+            Touch t = Input.GetTouch(0);
 
-            if (touch.phase == TouchPhase.Began ) //check for the first touch
+            if (t.phase == TouchPhase.Began)
             {
-                fp = touch.position;
-                lp = touch.position;
+                firstPressPos = new Vector2(t.position.x, t.position.y);
             }
-            else if (touch.phase == TouchPhase.Moved) // update the last position based on where they moved
-            {
-                lp = touch.position;
-            }
-            else if (touch.phase == TouchPhase.Ended) //check if the finger is removed from the screen
-            {
-                lp = touch.position;  //last touch position. Ommitted if you use list
 
-                //Check if drag distance is greater than 20% of the screen height
-                if (Mathf.Abs(lp.x - fp.x) > dragDistance || Mathf.Abs(lp.y - fp.y) > dragDistance)
-                {//It's a drag
-                 //check if the drag is vertical or horizontal
-                    if (Mathf.Abs(lp.x - fp.x) > Mathf.Abs(lp.y - fp.y))
-                    {   //If the horizontal movement is greater than the vertical movement...
-                        if ((lp.x > fp.x))  //If the movement was to the right)
-                        {   //Right swipe
-                            Debug.Log("Right Swipe");
-                        }
-                        else
-                        {   //Left swipe
-                            Debug.Log("Left Swipe");
-                        }
+            if (t.phase == TouchPhase.Ended)
+            {
+                secondPressPos = new Vector2(t.position.x, t.position.y);
+                currentSwipe = new Vector3(secondPressPos.x - firstPressPos.x, secondPressPos.y - firstPressPos.y);
+
+                // Make sure it was a legit swipe, not a tap
+                if (currentSwipe.magnitude < minSwipeLength)
+                {
+                    swipeDirection = Swipe.None;
+                    return;
+                }
+
+                currentSwipe.Normalize();
+
+                // Swipe up
+                if (currentSwipe.y > 0 && currentSwipe.x > -0.5f && currentSwipe.x < 0.5f)
+                {
+                    swipeDirection = Swipe.Up;
+                    // Swipe down
+                    if (waveCharge == 0)
+                    {
+                        Debug.Log("NO PUEDEH HACER NADA PARGUELA");
+                        //not charged, do nothing
+                    }else if (waveCharge == 1)
+                    {
+                        //Clean first row
+
+                    } else if (waveCharge == 2)
+                    {
+                        //Clean second round
                     }
-                    else
-                    {   //the vertical movement is greater than the horizontal movement
-                        if (lp.y > fp.y)  //If the movement was up
-                        {   //Up swipe
-                            Debug.Log("Up Swipe");
-                        }
-                        else
-                        {   //Down swipe
-                            Debug.Log("Down Swipe");
-                        }
+                    else if (waveCharge == 3)
+                    {
+                        //Clean third row
+                    }
+                    else if (waveCharge == 4)
+                    {
+                        //Clean fourth row
                     }
                 }
-                else
-                {   //It's a tap as the drag distance is less than 20% of the screen height
-                    Debug.Log("Tap");
+                else if (currentSwipe.y < 0 && currentSwipe.x > -0.5f && currentSwipe.x < 0.5f)
+                {
+                    swipeDirection = Swipe.Down;
+                    // Swipe left
+                }
+                else if (currentSwipe.x < 0 && currentSwipe.y > -0.5f && currentSwipe.y < 0.5f)
+                {
+                    swipeDirection = Swipe.Left;
+                    // Swipe right
+                }
+                else if (currentSwipe.x > 0 && currentSwipe.y > -0.5f && currentSwipe.y < 0.5f)
+                {
+                    swipeDirection = Swipe.Right;
                 }
             }
+        }
+        else
+        {
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                firstClickPos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            }
+            else
+            {
+                swipeDirection = Swipe.None;
+                //Debug.Log ("None");
+            }
+            if (Input.GetMouseButtonUp(0))
+            {
+                secondClickPos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+                currentSwipe = new Vector3(secondClickPos.x - firstClickPos.x, secondClickPos.y - firstClickPos.y);
+
+                // Make sure it was a legit swipe, not a tap
+                if (currentSwipe.magnitude < minSwipeLength)
+                {
+                    swipeDirection = Swipe.None;
+                    return;
+                }
+
+                currentSwipe.Normalize();
+
+                //Swipe directional check
+                // Swipe up
+                if (currentSwipe.y > 0 && currentSwipe.x > -0.5f && currentSwipe.x < 0.5f)
+                {
+                    swipeDirection = Swipe.Up;
+                    Debug.Log("Up");
+
+                    // Swipe down
+                }
+                else if (currentSwipe.y < 0 && currentSwipe.x > -0.5f && currentSwipe.x < 0.5f)
+                {
+                    //swipeDirection = Swipe.Down;
+                    //Debug.Log("Down");
+
+                    // Swipe left
+                }
+                else if (currentSwipe.x < 0 && currentSwipe.y > -0.5f && currentSwipe.y < 0.5f)
+                {
+                    //swipeDirection = Swipe.Left;
+                    //Debug.Log("Left");
+                    // Swipe right
+                }
+                else if (currentSwipe.x > 0 && currentSwipe.y > -0.5f && currentSwipe.y < 0.5f)
+                {
+                    //swipeDirection = Swipe.Right;
+                    //Debug.Log("right");
+                }
+            }
+
         }
     }
 }
