@@ -31,7 +31,8 @@ public class CastleManager : MonoBehaviour
 	public float TimeToConstruct;
 
 	private float timeConstruct = 0;
-	
+
+
 
 
     void Start()

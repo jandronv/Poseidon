@@ -22,6 +22,11 @@ public class GameManager : MonoBehaviour
     [Tooltip("Cantidad de castillos completados en el momento")]
     private int completedCastles=0;
     // Use this for initialization
+
+    int totalClicks=0;
+
+    public Image sunsetBG;
+
     void Start()
     {
         CM.CreateGrid();
@@ -44,7 +49,10 @@ public class GameManager : MonoBehaviour
         ActiveTime += Time.deltaTime;
         var percent = ActiveTime / MaxTime;
         SunSlider.value = Mathf.Lerp(0, 1, percent);
-        
+        Color c = sunsetBG.color;
+        c.a= Mathf.Lerp(0, 0.4f, percent);
+        sunsetBG.color = c;
+
         if (SunSlider.value >= 1 && end == false)
         {
             end = true;
@@ -63,8 +71,12 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
         if (cause == "timeup")
         {
-            Debug.Log("SUNSET IS HERE");
+            for (int i = 0; i < castillos.Length; i++)
+            {
+                totalClicks += castillos[i].clicks;
+            }
 
+            Debug.Log("SUNSET IS HERE" +totalClicks);
         }
         else if (cause == "kidswin")
         {

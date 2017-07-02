@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: f4304d1a3ee69184d963f8d26ed71de1
+timeCreated: 1498949807
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: superscript
+  fontNames:
+  - superscript
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

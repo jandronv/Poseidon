@@ -23,10 +23,8 @@ public class CastilloArena : MonoBehaviour {
 	private bool firstIni = false;
 
 	public List<Sprite> Sprites;
+    public int clicks=0;
 
-
-
-	// Use this for initialization
 	void Start () {
 		
 		VidaActual = 0;
@@ -101,9 +99,11 @@ public class CastilloArena : MonoBehaviour {
 	/// </summary>
 	public void OnMouseDown()
 	{
-
-		//Restamos una vida por click
-		RestaVida(5);
+        if (EnConstruccion) { 
+            clicks++;
+        }
+        //Restamos una vida por click
+        RestaVida(5);
 	}
 
 	/// <summary>
