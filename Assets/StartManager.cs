@@ -25,6 +25,6 @@ public class StartManager : MonoBehaviour {
     public void openMenuLevel(string level)
     {
         MenuLevel.SetActive(true);
-        MenuLevel.transform.FindChild("LevelName").GetComponent<Text>().text = "Beach nr." + level;
+        MenuLevel.transform.Find("LevelName").GetComponent<Text>().text = "Beach nr." + level;
     }
 }
