@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor.SceneManagement;
+using UnityEngine.UI;
 
 public class StartManager : MonoBehaviour {
-
+    public GameObject MenuLevel;
 	// Use this for initialization
 	void Start () {
 		
@@ -19,5 +20,11 @@ public class StartManager : MonoBehaviour {
     {
         EditorSceneManager.LoadScene("MainScene");
 
+    }
+
+    public void openMenuLevel(string level)
+    {
+        MenuLevel.SetActive(true);
+        MenuLevel.transform.FindChild("LevelName").GetComponent<Text>().text = "Beach nr." + level;
     }
 }
