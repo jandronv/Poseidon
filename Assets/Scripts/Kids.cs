@@ -43,15 +43,16 @@ public class Kids : MonoBehaviour {
 
 		if (volver)
 		{
-			//Debug.Log("Entra");
+            //Debug.Log("Entra");
 			GetComponent<Animator>().SetTrigger("Llorar");
 			Volver();
 		}
 	}
 
 	public void Move()
-	{
-		float distCovered = (Time.time - startTime) * speed;
+    {
+
+        float distCovered = (Time.time - startTime) * speed;
 		float fracJourney = distCovered / journeyLength;
 		transform.position = Vector3.Lerp(startMarker.position, endMarker.position, fracJourney);
 
@@ -71,7 +72,8 @@ public class Kids : MonoBehaviour {
 
 	public void Volver()
 	{
-		float distCovered = (Time.time - startTime) * speed * 30;
+
+        float distCovered = (Time.time - startTime) * speed * 30;
 		float fracJourney = distCovered / journeyLength;
 		transform.position = Vector3.Lerp(endMarker.position, posVuelta.position, fracJourney);
 		GetComponent<SpriteRenderer>().flipX = true;
