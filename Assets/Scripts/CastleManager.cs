@@ -61,15 +61,12 @@ public class CastleManager : MonoBehaviour
 				if (c.posInGrid == pos && !c.EnConstruccion)
 				{
 					c.EnConstruccion = true;
-
+					c.GetComponentInChildren<Kids>().mover = true;
+					//c.GetComponentInChildren<SpriteRenderer>().enabled = true;
 				}
-
 			}
-
 			timeConstruct = 0;
 		}
-
-
 	}
 
     /// <summary>

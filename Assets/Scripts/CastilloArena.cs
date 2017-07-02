@@ -24,6 +24,8 @@ public class CastilloArena : MonoBehaviour {
 
 	public List<Sprite> Sprites;
 
+
+
 	// Use this for initialization
 	void Start () {
 		
@@ -37,18 +39,26 @@ public class CastilloArena : MonoBehaviour {
 
 		if (EnConstruccion) {
 
+			GetComponentInChildren<Kids>().GetComponent<SpriteRenderer>().enabled = true;
 			
+			//Lanzar Anim niño
 			if (VidaActual == Estados[0] && firstIni)
 			{
 				//Debug.Log("Cambiamos al sprite 0");
+				GetComponentInChildren<Kids>().volver = true;
+				GetComponentInChildren<Kids>().ReiniciaTiempo();
+
 				GetComponent<SpriteRenderer>().sprite = Sprites[0];
+				//lanzar animacion de llorar
 				EnConstruccion = false;
-		
+				firstIni = false;
+				
+
 			}
 			else if (VidaActual > Estados[1] && VidaActual <= Estados[2])
 			{
 				//Debug.Log("Cambiamos al sprite 1");
-
+				GetComponentInChildren<Kids>().GetComponent<Animator>().SetTrigger("Castillo");
 				GetComponent<SpriteRenderer>().sprite = Sprites[1];
 
 			}
@@ -68,8 +78,7 @@ public class CastilloArena : MonoBehaviour {
 			{
 				//Debug.Log("Castillo terminado, sprite 4");
 				GetComponent<SpriteRenderer>().sprite = Sprites[4];
-
-
+				GetComponentInChildren<Kids>().GetComponent<Animator>().SetTrigger("Terminado");
 				CastilloTerminado = true;
 				//Meter sprite terminado
 			}
