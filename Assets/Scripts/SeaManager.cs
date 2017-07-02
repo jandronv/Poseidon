@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public enum Swipe { None, Up, Down, Left, Right };
 public class SeaManager : MonoBehaviour
@@ -12,11 +13,29 @@ public class SeaManager : MonoBehaviour
     Vector2 secondClickPos;
 
     public int waveCharge=0;
-
+    public GameManager GM;
     public static Swipe swipeDirection;
 
+    public GameObject waveSprite;
+
+
+    public float speed = 1.0F;
+    private float startTime;
+    private float journeyLength;
+    public Transform positionIniWave;
+    public List<Transform> range;
+    void Start()
+    {
+        startTime = Time.time;
+        Debug.Log(positionIniWave.name);
+        Debug.Log(waveSprite.name);
+        positionIniWave.position = waveSprite.transform.position;
+
+        journeyLength = Vector3.Distance(waveSprite.transform.position, range[0].position);
+    }
     void Update()
     {
+        waveCharge=GM.waveCharge;
         DetectSwipe();
 
     }
@@ -54,22 +73,35 @@ public class SeaManager : MonoBehaviour
                     if (waveCharge == 0)
                     {
                         Debug.Log("NO PUEDEH HACER NADA PARGUELA");
+
+
                         //not charged, do nothing
                     }else if (waveCharge == 1)
                     {
                         //Clean first row
-
+                        float distCovered = (Time.time - startTime) * speed;
+                        float fracJourney = distCovered / journeyLength;
+                        waveSprite.transform.position = Vector3.Lerp(positionIniWave.position, range[0].position, fracJourney);
                     } else if (waveCharge == 2)
                     {
                         //Clean second round
+                        float distCovered = (Time.time - startTime) * speed;
+                        float fracJourney = distCovered / journeyLength;
+                        waveSprite.transform.position = Vector3.Lerp(positionIniWave.position, range[1].position, fracJourney);
                     }
                     else if (waveCharge == 3)
                     {
                         //Clean third row
+                        float distCovered = (Time.time - startTime) * speed;
+                        float fracJourney = distCovered / journeyLength;
+                        waveSprite.transform.position = Vector3.Lerp(positionIniWave.position, range[2].position, fracJourney);
                     }
                     else if (waveCharge == 4)
                     {
                         //Clean fourth row
+                        float distCovered = (Time.time - startTime) * speed;
+                        float fracJourney = distCovered / journeyLength;
+                        waveSprite.transform.position = Vector3.Lerp(positionIniWave.position, range[3].position, fracJourney);
                     }
                 }
                 else if (currentSwipe.y < 0 && currentSwipe.x > -0.5f && currentSwipe.x < 0.5f)
@@ -121,7 +153,59 @@ public class SeaManager : MonoBehaviour
                     swipeDirection = Swipe.Up;
                     Debug.Log("Up");
 
-                    // Swipe down
+                    if (currentSwipe.y > 0 && currentSwipe.x > -0.5f && currentSwipe.x < 0.5f)
+                    {
+                        swipeDirection = Swipe.Up;
+                        // Swipe down
+                        if (waveCharge == 0)
+                        {
+                            Debug.Log("NO PUEDEH HACER NADA PARGUELA");
+
+
+                            //not charged, do nothing
+                        }
+                        else if (waveCharge == 1)
+                        {
+
+                            //Clean first row
+                            //float distCovered = (Time.time - startTime) * speed;
+                            //float fracJourney = distCovered / journeyLength;
+                            //waveSprite.transform.position = Vector3.Lerp(positionIniWave.position, range[0].position, fracJourney);
+                            waveSprite.GetComponent<Animator>().SetTrigger("waveActive");
+                            
+                            GM.reinitiateClicksWave();
+                        }
+                        else if (waveCharge == 2)
+                        {
+                            //Clean second round
+                            //float distCovered = (Time.time - startTime) * speed;
+                            //float fracJourney = distCovered / journeyLength;
+                            //waveSprite.transform.position = Vector3.Lerp(positionIniWave.position, range[1].position, fracJourney);
+                            waveSprite.GetComponent<Animator>().SetTrigger("waveActive");
+
+                            GM.reinitiateClicksWave();
+                        }
+                        else if (waveCharge == 3)
+                        {
+                            //Clean third row
+                            //float distCovered = (Time.time - startTime) * speed;
+                            //float fracJourney = distCovered / journeyLength;
+                            //waveSprite.transform.position = Vector3.Lerp(positionIniWave.position, range[2].position, fracJourney);
+                            waveSprite.GetComponent<Animator>().SetTrigger("waveActive");
+
+                            GM.reinitiateClicksWave();
+                        }
+                        else if (waveCharge == 4)
+                        {
+                            //Clean fourth row
+                            //float distCovered = (Time.time - startTime) * speed;
+                            //float fracJourney = distCovered / journeyLength;
+                            //waveSprite.transform.position = Vector3.Lerp(positionIniWave.position, range[3].position, fracJourney);
+                            waveSprite.GetComponent<Animator>().SetTrigger("waveActive");
+
+                            GM.reinitiateClicksWave();
+                        }
+                    }
                 }
                 else if (currentSwipe.y < 0 && currentSwipe.x > -0.5f && currentSwipe.x < 0.5f)
                 {

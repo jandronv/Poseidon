@@ -25,6 +25,9 @@ public class GameManager : MonoBehaviour
     // Use this for initialization
 
     int totalClicks=0;
+    public int chargeClicks;
+    public int waveCharge;
+    public int totalClicksWave=0;
 
     public GameObject MenuGameOver;
 
@@ -41,7 +44,17 @@ public class GameManager : MonoBehaviour
 
     public void Update()
     {
-        for(int i=0; i < castillos.Length; i++)
+        totalClicks = 0;
+        totalClicksWave = 0;
+        for (int i = 0; i < castillos.Length; i++)
+        {
+            totalClicks += castillos[i].clicks;
+            totalClicksWave += castillos[i].clicksWave;
+        }
+
+        chargeWave();
+
+        for (int i=0; i < castillos.Length; i++)
         {
             if (castillos[i].CastilloTerminado == true)
             {
@@ -75,10 +88,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
         if (cause == "timeup")
         {
-            for (int i = 0; i < castillos.Length; i++)
-            {
-                totalClicks += castillos[i].clicks;
-            }
+            
             MenuGameOver.transform.FindChild("LevelResult").GetComponent<Text>().text="Victory!";
             Debug.Log("SUNSET IS HERE" +totalClicks);
         }
@@ -109,6 +119,59 @@ public class GameManager : MonoBehaviour
         yield return null;
 
     }
+
+
+    public void chargeWave()
+    {
+         chargeClicks = totalClicksWave;
+        if (chargeClicks <10)
+        {
+            //No carga
+            waveCharge = 0;
+            GameObject.Find("Wave1").GetComponent<SpriteRenderer>().enabled = false;
+            GameObject.Find("Wave2").GetComponent<SpriteRenderer>().enabled = false;
+            GameObject.Find("Wave3").GetComponent<SpriteRenderer>().enabled = false;
+            GameObject.Find("Wave4").GetComponent<SpriteRenderer>().enabled = false;
+
+        }
+        else if (chargeClicks >= 10 && chargeClicks < 20)
+        {
+            //sprite2 activo
+            waveCharge = 1;
+            GameObject.Find("Wave1").GetComponent<SpriteRenderer>().enabled = true;
+        }
+        else if (chargeClicks >= 20 && chargeClicks < 30)
+        {
+
+            waveCharge = 2;
+
+            GameObject.Find("Wave2").GetComponent<SpriteRenderer>().enabled = true;
+        }
+        else if (chargeClicks >= 30 && chargeClicks < 40)
+        {
+
+            waveCharge = 3;
+
+            GameObject.Find("Wave3").GetComponent<SpriteRenderer>().enabled = true;
+        }
+        else if (chargeClicks >= 40 && chargeClicks <= 50)
+        {
+
+            waveCharge = 4;
+
+            GameObject.Find("Wave4").GetComponent<SpriteRenderer>().enabled = true;
+        }
+    }
+
+    public void reinitiateClicksWave()
+    {
+        for (int i = 0; i < castillos.Length; i++)
+        {
+             castillos[i].clicksWave=0;
+        }
+    }
+
+
     public void restartGame()
     {
 

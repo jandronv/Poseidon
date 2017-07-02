@@ -24,6 +24,7 @@ public class CastilloArena : MonoBehaviour {
 
 	public List<Sprite> Sprites;
     public int clicks=0;
+    public int clicksWave = 0;
     public CastleManager CM;
 	void Start () {
 		
@@ -102,6 +103,7 @@ public class CastilloArena : MonoBehaviour {
 	{
         if (EnConstruccion) { 
             clicks++;
+            clicksWave++;
         }
         //Restamos una vida por click
         RestaVida(5);
