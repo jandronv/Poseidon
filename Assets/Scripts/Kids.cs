@@ -38,25 +38,27 @@ public class Kids : MonoBehaviour {
 
 		if (mover)
 		{
-			Move();
+            volver = false;
+            Move();
 		}
 
 		if (volver)
 		{
             //Debug.Log("Entra");
-			GetComponent<Animator>().SetTrigger("Llorar");
 			Volver();
 		}
 	}
 
 	public void Move()
     {
+        //GetComponent<Animator>().SetTrigger("Run");
 
         float distCovered = (Time.time - startTime) * speed;
 		float fracJourney = distCovered / journeyLength;
 		transform.position = Vector3.Lerp(startMarker.position, endMarker.position, fracJourney);
+        GetComponent<SpriteRenderer>().flipX = false;
 
-		if (x == 0 && transform.position.x > (endMarker.position.x - 0.01))
+        if (x == 0 && transform.position.x > (endMarker.position.x - 0.01))
 		{
 			GetComponent<SpriteRenderer>().flipX = true;
 			GetComponent<Animator>().SetTrigger("Castillo");
@@ -72,22 +74,26 @@ public class Kids : MonoBehaviour {
 
 	public void Volver()
 	{
+        GetComponent<Animator>().SetTrigger("Llorar");
 
         float distCovered = (Time.time - startTime) * speed * 30;
 		float fracJourney = distCovered / journeyLength;
 		transform.position = Vector3.Lerp(endMarker.position, posVuelta.position, fracJourney);
 		GetComponent<SpriteRenderer>().flipX = true;
+
+
 		if (x == 0 && transform.position.x < (posVuelta.position.x + 0.01))
 		{
-			
-			GetComponent<SpriteRenderer>().enabled = false;
-			GetComponent<Animator>().SetTrigger("Run");
-			volver = false;
+            volver = false;
+            GetComponent<Animator>().SetTrigger("Run");
+
+            GetComponent<SpriteRenderer>().enabled = false;
 		}
 		else if (transform.position.x < (posVuelta.position.x + 0.01))
 		{
-			GetComponent<Animator>().SetTrigger("Run");
 			volver = false;
+            
+			GetComponent<Animator>().SetTrigger("Run");
 			GetComponent<SpriteRenderer>().enabled = false;
 			
 		}

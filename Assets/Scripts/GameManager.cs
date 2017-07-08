@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI; // Required when Using UI elements.
-using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 
 
 public class GameManager : MonoBehaviour
@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        Time.timeScale = 1f;
         CM.CreateGrid();
         SunSlider.value = 0;
         
@@ -100,7 +101,7 @@ public class GameManager : MonoBehaviour
         }
 
         MenuGameOver.transform.FindChild("Castles").transform.FindChild("Text").GetComponent<Text>().text = CM.numCastlesDestroyed.ToString();
-        MenuGameOver.transform.FindChild("Seashells").transform.FindChild("Text").GetComponent<Text>().text = "25";
+        MenuGameOver.transform.FindChild("Seashells").transform.FindChild("Text").GetComponent<Text>().text = CM.totalShells.ToString();
 
         GameObject.Find("CanvasGameOver").GetComponent<Canvas>().enabled = true;
 
@@ -172,17 +173,34 @@ public class GameManager : MonoBehaviour
     }
 
 
+
     public void restartGame()
     {
 
         Time.timeScale = 1.0f;
-        EditorSceneManager.LoadScene(EditorSceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void exitGame()
     {
 
         Time.timeScale = 1.0f;
-        EditorSceneManager.LoadScene("StartScene");
+        SceneManager.LoadScene("StartScene");
+    }
+
+    public void Wave(int charge)
+    {
+
+        int total = (charge * 3) - 1;
+
+        for (int i = 0; i < total; i++)
+        {
+         
+                castillos[i].RestaVida(15);
+
+            
+            
+        }
+
     }
 }

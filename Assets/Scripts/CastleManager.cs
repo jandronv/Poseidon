@@ -34,6 +34,7 @@ public class CastleManager : MonoBehaviour
 
     public int numCastlesDestroyed=0;
 
+    public int totalShells = 0;
 
     void Start()
     {
@@ -53,13 +54,14 @@ public class CastleManager : MonoBehaviour
 		{
 
 			Vector2 pos = GetRandomPosition();
-			//Si esta libre la posicion lanzamos al niño, cuando el collider del niño entre en el del castillo se empieza a construir
-			GameObject newEmptyGameObject = GameObject.FindGameObjectWithTag("Castillos");
+            //Si esta libre la posicion lanzamos al niño, cuando el collider del niño entre en el del castillo se empieza a construir
+
+            GameObject newEmptyGameObject = GameObject.FindGameObjectWithTag("Castillos");
 			CastilloArena[] castillos = newEmptyGameObject.GetComponentsInChildren<CastilloArena>();
 
 			foreach (CastilloArena c in castillos)
 			{
-				if (c.posInGrid == pos && !c.EnConstruccion)
+				if (c.posInGrid == pos && !c.EnConstruccion && !c.volviendo)
 				{
 					c.EnConstruccion = true;
 					c.GetComponentInChildren<Kids>().mover = true;

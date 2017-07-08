@@ -16,8 +16,9 @@ public class CastilloArena : MonoBehaviour {
 	[Tooltip("Numero de vidas por ticks.")]
 	public int numVidasPorTicks = 1;
 	public bool EnConstruccion = false;
-	public bool CastilloTerminado = false;
-	public Vector2 posInGrid;
+    public bool CastilloTerminado = false;
+    public bool volviendo = false;
+    public Vector2 posInGrid;
 	private float _mTimeToAddVida = 0;
 
 	private bool firstIni = false;
@@ -34,28 +35,38 @@ public class CastilloArena : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+        if (GetComponentInChildren<Kids>().GetComponent<SpriteRenderer>().enabled == false)
+        {
+            volviendo = false;
+            GetComponentInChildren<Kids>().GetComponent<Animator>().Rebind();
 
+        }
 
-		if (EnConstruccion) {
+        if (EnConstruccion) {
 
 			GetComponentInChildren<Kids>().GetComponent<SpriteRenderer>().enabled = true;
-			
-			//Lanzar Anim niño
-			if (VidaActual == Estados[0] && firstIni)
+            GetComponentInChildren<Kids>().GetComponent<Animator>().Play("Run");
+
+            //Lanzar Anim niño
+            if (VidaActual == Estados[0] && firstIni)
 			{
 				//Debug.Log("Cambiamos al sprite 0");
 				GetComponentInChildren<Kids>().volver = true;
 				GetComponentInChildren<Kids>().ReiniciaTiempo();
 
-				GetComponent<SpriteRenderer>().sprite = Sprites[0];
+                spawnShell();
+
+                GetComponent<SpriteRenderer>().sprite = Sprites[0];
+                firstIni = false;
 				//lanzar animacion de llorar
 				EnConstruccion = false;
+                volviendo = true;
 				firstIni = false;
 				CM.numCastlesDestroyed++;
-               
 
-			}
-			else if (VidaActual > Estados[1] && VidaActual <= Estados[2])
+
+            }
+            else if (VidaActual > Estados[1] && VidaActual <= Estados[2])
 			{
 				//Debug.Log("Cambiamos al sprite 1");
 				GetComponentInChildren<Kids>().GetComponent<Animator>().SetTrigger("Castillo");
@@ -106,7 +117,7 @@ public class CastilloArena : MonoBehaviour {
             clicksWave++;
         }
         //Restamos una vida por click
-        RestaVida(5);
+        RestaVida(1);
 	}
 
 	/// <summary>
@@ -115,9 +126,13 @@ public class CastilloArena : MonoBehaviour {
 	/// <param name="vidas">Numero de vidas a restar</param>
 	public void RestaVida(int vidas)
 	{
-		if (VidaActual >= 1) {
-			VidaActual--;
-		}
+		if (VidaActual-vidas >= 0 ) {
+			VidaActual-=vidas;
+        }
+        else
+        {
+            VidaActual = 0;
+        }
 		if (CastilloTerminado)
 		{
 			CastilloTerminado = false;
@@ -130,6 +145,33 @@ public class CastilloArena : MonoBehaviour {
 
 	}
 
+     void spawnShell()
+    {
+        if (Random.value > 0.5) //%20 percent chance (1 - 0.2 is 0.8)
+        { //code here
+            this.transform.FindChild("Shell").GetComponent<SpriteRenderer>().enabled = true;
+            this.transform.FindChild("Shell").GetComponent<Animator>().enabled = true;
+            CM.totalShells++;
+            waitForAnimation(this.transform.FindChild("Shell").GetComponent<Animation>());
+
+            
+            //this.transform.FindChild("Shell").GetComponent<SpriteRenderer>().enabled = false;
+
+        }
+
+    }
+
+    IEnumerator waitForAnimation(Animation anim)
+    {
+        Debug.Log("YAY");
+
+        while (anim.isPlaying)
+        {
+           yield  return null;
+        }
+        this.transform.FindChild("Shell").GetComponent<SpriteRenderer>().enabled = false;
+        this.transform.FindChild("Shell").GetComponent<Animator>().enabled = false;
+    }
 
 
 }

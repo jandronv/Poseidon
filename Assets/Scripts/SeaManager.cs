@@ -27,8 +27,6 @@ public class SeaManager : MonoBehaviour
     void Start()
     {
         startTime = Time.time;
-        Debug.Log(positionIniWave.name);
-        Debug.Log(waveSprite.name);
         positionIniWave.position = waveSprite.transform.position;
 
         journeyLength = Vector3.Distance(waveSprite.transform.position, range[0].position);
@@ -42,7 +40,7 @@ public class SeaManager : MonoBehaviour
 
     public void DetectSwipe()
     {
-        if (Input.touches.Length > 0)
+        if (Input.touches.Length > 0)//detecta dedo
         {
             Touch t = Input.GetTouch(0);
 
@@ -76,32 +74,51 @@ public class SeaManager : MonoBehaviour
 
 
                         //not charged, do nothing
-                    }else if (waveCharge == 1)
+                    }
+                    else if (waveCharge == 1)
                     {
+
                         //Clean first row
-                        float distCovered = (Time.time - startTime) * speed;
-                        float fracJourney = distCovered / journeyLength;
-                        waveSprite.transform.position = Vector3.Lerp(positionIniWave.position, range[0].position, fracJourney);
-                    } else if (waveCharge == 2)
+                        //float distCovered = (Time.time - startTime) * speed;
+                        //float fracJourney = distCovered / journeyLength;
+                        //waveSprite.transform.position = Vector3.Lerp(positionIniWave.position, range[0].position, fracJourney);
+                        waveSprite.GetComponent<Animator>().SetTrigger("wave1");
+                        GM.Wave(waveCharge);
+
+                        GM.reinitiateClicksWave();
+                    }
+                    else if (waveCharge == 2)
                     {
                         //Clean second round
-                        float distCovered = (Time.time - startTime) * speed;
-                        float fracJourney = distCovered / journeyLength;
-                        waveSprite.transform.position = Vector3.Lerp(positionIniWave.position, range[1].position, fracJourney);
+                        //float distCovered = (Time.time - startTime) * speed;
+                        //float fracJourney = distCovered / journeyLength;
+                        //waveSprite.transform.position = Vector3.Lerp(positionIniWave.position, range[1].position, fracJourney);
+                        waveSprite.GetComponent<Animator>().SetTrigger("wave2");
+                        GM.Wave(waveCharge);
+
+                        GM.reinitiateClicksWave();
                     }
                     else if (waveCharge == 3)
                     {
                         //Clean third row
-                        float distCovered = (Time.time - startTime) * speed;
-                        float fracJourney = distCovered / journeyLength;
-                        waveSprite.transform.position = Vector3.Lerp(positionIniWave.position, range[2].position, fracJourney);
+                        //float distCovered = (Time.time - startTime) * speed;
+                        //float fracJourney = distCovered / journeyLength;
+                        //waveSprite.transform.position = Vector3.Lerp(positionIniWave.position, range[2].position, fracJourney);
+                        waveSprite.GetComponent<Animator>().SetTrigger("wave3");
+                        GM.Wave(waveCharge);
+
+                        GM.reinitiateClicksWave();
                     }
                     else if (waveCharge == 4)
                     {
                         //Clean fourth row
-                        float distCovered = (Time.time - startTime) * speed;
-                        float fracJourney = distCovered / journeyLength;
-                        waveSprite.transform.position = Vector3.Lerp(positionIniWave.position, range[3].position, fracJourney);
+                        //float distCovered = (Time.time - startTime) * speed;
+                        //float fracJourney = distCovered / journeyLength;
+                        //waveSprite.transform.position = Vector3.Lerp(positionIniWave.position, range[3].position, fracJourney);
+                        waveSprite.GetComponent<Animator>().SetTrigger("wave4");
+                        GM.Wave(waveCharge);
+
+                        GM.reinitiateClicksWave();
                     }
                 }
                 else if (currentSwipe.y < 0 && currentSwipe.x > -0.5f && currentSwipe.x < 0.5f)
@@ -171,8 +188,9 @@ public class SeaManager : MonoBehaviour
                             //float distCovered = (Time.time - startTime) * speed;
                             //float fracJourney = distCovered / journeyLength;
                             //waveSprite.transform.position = Vector3.Lerp(positionIniWave.position, range[0].position, fracJourney);
-                            waveSprite.GetComponent<Animator>().SetTrigger("waveActive");
-                            
+                            waveSprite.GetComponent<Animator>().SetTrigger("wave1");
+                            GM.Wave(waveCharge);
+
                             GM.reinitiateClicksWave();
                         }
                         else if (waveCharge == 2)
@@ -181,7 +199,8 @@ public class SeaManager : MonoBehaviour
                             //float distCovered = (Time.time - startTime) * speed;
                             //float fracJourney = distCovered / journeyLength;
                             //waveSprite.transform.position = Vector3.Lerp(positionIniWave.position, range[1].position, fracJourney);
-                            waveSprite.GetComponent<Animator>().SetTrigger("waveActive");
+                            waveSprite.GetComponent<Animator>().SetTrigger("wave2");
+                            GM.Wave(waveCharge);
 
                             GM.reinitiateClicksWave();
                         }
@@ -191,7 +210,8 @@ public class SeaManager : MonoBehaviour
                             //float distCovered = (Time.time - startTime) * speed;
                             //float fracJourney = distCovered / journeyLength;
                             //waveSprite.transform.position = Vector3.Lerp(positionIniWave.position, range[2].position, fracJourney);
-                            waveSprite.GetComponent<Animator>().SetTrigger("waveActive");
+                            waveSprite.GetComponent<Animator>().SetTrigger("wave3");
+                            GM.Wave(waveCharge);
 
                             GM.reinitiateClicksWave();
                         }
@@ -201,7 +221,8 @@ public class SeaManager : MonoBehaviour
                             //float distCovered = (Time.time - startTime) * speed;
                             //float fracJourney = distCovered / journeyLength;
                             //waveSprite.transform.position = Vector3.Lerp(positionIniWave.position, range[3].position, fracJourney);
-                            waveSprite.GetComponent<Animator>().SetTrigger("waveActive");
+                            waveSprite.GetComponent<Animator>().SetTrigger("wave4");
+                            GM.Wave(waveCharge);
 
                             GM.reinitiateClicksWave();
                         }
