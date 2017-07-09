@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
 
     [Tooltip("Cantidad de castillos completados en el momento")]
     private int completedCastles=0;
+
+    public Image skillActive;
     
     // Use this for initialization
 
@@ -33,6 +35,8 @@ public class GameManager : MonoBehaviour
 
     public Image sunsetBG;
 
+    public Sprite WaveSp, HotSp, WindSp, StormSp;
+
     void Start()
     {
         Time.timeScale = 1f;
@@ -41,6 +45,28 @@ public class GameManager : MonoBehaviour
         
         CA = GameObject.FindGameObjectWithTag("Castillos");
         castillos = CA.GetComponentsInChildren<CastilloArena>();
+        Debug.Log(PlayerPrefs.GetString("activeSkill"));
+        switch (PlayerPrefs.GetString("activeSkill"))
+        {
+            case "":
+                Color c = new Color(255f, 255f, 255f, 0f);
+                skillActive.color = c;
+                break;
+            case "Tsunami":
+                skillActive.sprite = WaveSp;
+                break;
+            case "Hot":
+                skillActive.sprite = HotSp;
+                break;
+            case "Wind":
+                skillActive.sprite = WindSp;
+                break;
+            case "Storm":
+                skillActive.sprite = StormSp;
+                break;
+            default:
+                break;
+        }
     }
 
     public void Update()
@@ -57,6 +83,10 @@ public class GameManager : MonoBehaviour
 
         for (int i=0; i < castillos.Length; i++)
         {
+
+           
+
+
             if (castillos[i].CastilloTerminado == true)
             {
                 completedCastles++;
@@ -91,6 +121,8 @@ public class GameManager : MonoBehaviour
         {
             
             MenuGameOver.transform.FindChild("LevelResult").GetComponent<Text>().text="Victory!";
+            int nextLevel = PlayerPrefs.GetInt("actualLevel") + 1;
+            PlayerPrefs.SetString(nextLevel.ToString(), "unlocked");
             Debug.Log("SUNSET IS HERE" +totalClicks);
         }
         else if (cause == "kidswin")
@@ -185,7 +217,7 @@ public class GameManager : MonoBehaviour
     {
 
         Time.timeScale = 1.0f;
-        SceneManager.LoadScene("StartScene");
+        SceneManager.LoadScene("WorldScene");
     }
 
     public void Wave(int charge)

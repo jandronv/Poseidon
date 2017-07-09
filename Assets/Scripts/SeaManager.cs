@@ -33,8 +33,11 @@ public class SeaManager : MonoBehaviour
     }
     void Update()
     {
-        waveCharge=GM.waveCharge;
-        DetectSwipe();
+        if (PlayerPrefs.GetString("activeSkill") == "Tsunami")
+        {
+            waveCharge = GM.waveCharge;
+            DetectSwipe();
+        }
 
     }
 

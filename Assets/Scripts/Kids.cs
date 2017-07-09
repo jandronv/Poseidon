@@ -19,7 +19,14 @@ public class Kids : MonoBehaviour {
 	int x;
 	// Use this for initialization
 	void Start () {
-		startTime = Time.time;
+
+        //Si la habilidad SOL está activada...
+        if (PlayerPrefs.GetString("activeSkill") == "Hot")
+        {
+            speed = 0.5f;
+        }
+
+            startTime = Time.time;
 
 		x = Random.Range(0, 2);
 		//Debug.Log("x "+x);

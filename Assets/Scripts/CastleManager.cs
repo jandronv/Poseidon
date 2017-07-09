@@ -83,8 +83,11 @@ public class CastleManager : MonoBehaviour
         newEmptyGameObject.transform.position = Vector3.zero;
 		newEmptyGameObject.gameObject.tag = "Castillos";
 
-		// some math to find the most left and bottom offset
-		float offsetLeft = (-Columns / 2f) * distanceX + distanceX / 2f;
+        Columns = PlayerPrefs.GetInt("columns");
+        Rows = PlayerPrefs.GetInt("rows");
+
+        // some math to find the most left and bottom offset
+        float offsetLeft = (-Columns / 2f) * distanceX + distanceX / 2f;
         float offsetBottom = (-Rows / 2f) * distanceY + distanceY / 2f;
         // set it as first spawn castlePosition (z=1 because you had it in your script)
         Vector3 nextPosition = new Vector3(offsetLeft, offsetBottom, 1f);
